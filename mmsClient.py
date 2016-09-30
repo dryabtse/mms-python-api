@@ -59,12 +59,12 @@ class MmsClient:
         return json.loads(result.text)
  
 
-username = "dmitry.ryabtsev@10gen.com"
-apiKey = "eff7c093-fcae-4355-b1f5-3164490e962a"
-baseUrl = "http://52.64.222.163:8080"
+username = ""
+apiKey = ""
+baseUrl = ""
 mmsClient = MmsClient(username, apiKey, baseUrl)
 
-groupId = "57ad6050e4b0551a0483b82b"
+groupId = ""
 
 
 ##### Main section
@@ -93,7 +93,7 @@ for host in hosts["results"]:
 
 mmsClient.delHost(groupId, id)
 
-hostname = "ip-172-31-9-206.ap-southeast-2.compute.internal"
+hostname = ""
 port = "27015"
 
 host = mmsClient.getHostByNameAndPort(groupId, hostname, port)
