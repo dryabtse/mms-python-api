@@ -52,12 +52,27 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
     
-    def agentByType(self, groupId, type):
+    def getAgentByType(self, groupId, type):
         # Todo - check the type value
         url = self.url + 'groups/' + groupId + '/agents/' + type
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
- 
+
+    def getMonAgent(self, groupId):
+        url = self.url + 'groups/' + groupId + '/agents/MONITORING' 
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getBakAgent(self, groupId):
+        url = self.url + 'groups/' + groupId + '/agents/BACKUP' 
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getAutoAgent(self, groupId): 
+        url = self.url + 'groups/' + groupId + '/agents/AUTOMATION' 
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
 
 username = ""
 apiKey = ""
