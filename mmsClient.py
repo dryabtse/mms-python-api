@@ -8,7 +8,26 @@ class MmsClient:
         self.username = username
         self.apiKey = apiKey
         self.url = baseUrl + '/api/public/v1.0/'
- 
+# Groups
+    def getGroups(self):
+        url = self.url + 'groups'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroup(self, groupId):
+        url = self.url + 'groups/' + groupId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delGroup(self, groupId):
+        url = self.url + 'groups/' + groupId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+
+    def getGroupUsers(self, groupId):
+        url = self.url + 'groups/' + groupId + '/users'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+         
     def getAutomationConfig(self, groupId):
         url = self.url + 'groups/' + groupId + '/automationConfig'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -74,45 +93,3 @@ class MmsClient:
         return json.loads(result.text)
 
 
-username = ""
-apiKey = ""
-baseUrl = ""
-mmsClient = MmsClient(username, apiKey, baseUrl)
-
-groupId = ""
-
-
-##### Main section
-automationConfig = mmsClient.getAutomationConfig(groupId)
-print(json.dumps(automationConfig["version"]))
-
-#To remove a node from replica set:
-#
-#del automationConfig["processes"][2]["args2_6"]["replication"]
-#automationConfig["replicaSets"][0]["members"].pop(2)
-#automationConfig["version"] = int(automationConfig["version"]) + 1
-#updateResult = mmsClient.updateAutomationConfig(groupId, automationConfig)
-#print(json.dumps(updateResult))
-
-#f( len(automationConfig["processes"]) > 0):
-   # automationConfig["processes"][0]["disabled"] = True
-    #automationConfig["version"] = int(automationConfig["version"]) + 1
-    #updateResult = mmsClient.updateAutomationConfig(groupId, automationConfig)
-    #print(json.dumps(updateResult))
-
-hosts = mmsClient.getHosts(groupId)
-for host in hosts["results"]:
-    print(json.dumps(host["id"]))
-    print(json.dumps(host["hostname"]))
-    print(json.dumps(host["port"]))
-
-mmsClient.delHost(groupId, id)
-
-hostname = ""
-port = "27015"
-
-host = mmsClient.getHostByNameAndPort(groupId, hostname, port)
-
-
-# To stop a process 
-# automationConfig["processes"][5]["disabled"] = True
