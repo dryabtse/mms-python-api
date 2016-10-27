@@ -56,8 +56,7 @@ class MmsClient:
 
     def getAutomationStatus(self, groupId):
         url = self.url + 'groups/' + groupId + '/automationStatus'
-        headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
         
     def putMonAgentInfo(self, groupId, agentConfig):
