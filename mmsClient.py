@@ -27,25 +27,25 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/users'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-         
-    def getAutomationConfig(self, groupId):
-        url = self.url + 'groups/' + groupId + '/automationConfig'
-        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
-        return json.loads(result.text)
-        
+# Hosts
     def getHosts(self, groupId):
         url = self.url + 'groups/' + groupId + '/hosts'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-    
+
     def getHostByNameAndPort(self, groupId, hostname, port):
         url = self.url + 'groups/' + groupId + '/hosts/byName/' + hostname + ':' + port
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-    
+
     def delHost(self, groupId, hostId):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+# Automation         
+    def getAutomationConfig(self, groupId):
+        url = self.url + 'groups/' + groupId + '/automationConfig'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
  
     def updateAutomationConfig(self, groupId, automationConfig):
@@ -58,7 +58,7 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/automationStatus'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-        
+# Agents        
     def putMonAgentInfo(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/monitoringAgentConfig' 
         headers = {'Content-type': 'application/json'}
