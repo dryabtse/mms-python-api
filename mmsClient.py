@@ -53,6 +53,12 @@ class MmsClient:
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
         return json.loads(result.text)
+
+    def getAutomationStatus(self, groupId):
+        url = self.url + 'groups/' + groupId + '/automationStatus'
+        headers = {'Content-type': 'application/json'}
+        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
+        return json.loads(result.text)
         
     def putMonAgentInfo(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/monitoringAgentConfig' 
