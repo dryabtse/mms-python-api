@@ -22,6 +22,7 @@ class MmsClient:
     def delGroup(self, groupId):
         url = self.url + 'groups/' + groupId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
 
     def getGroupUsers(self, groupId):
         url = self.url + 'groups/' + groupId + '/users'
@@ -97,4 +98,39 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+# Backup and Restore
+    def getClusters(self, groupId):
+        url = self.url + 'groups/' + groupId + '/clusters'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
 
+    def getClusterSnapshots(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/snapshots'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getClusterSnapshotById(self, groupId, clusterId, snapshotId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/snapshots/' + snapshotId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getHostSnapshots(self, groupId, hostId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/snapshots'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getHostSnapshotById(self, groupId, hostId, snapshotId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/snapshots/' + snapshotId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postClusterRestoreJob(self, groupId, clusterId, payload):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+        result = requests.post(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=payload)
+        return json.loads(result.text)
+
+    def getClusterRestoreJobs(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+      
