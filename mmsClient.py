@@ -133,4 +133,14 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-      
+
+    def getClusterSnapshotSchedule(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/snapshotSchedule'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+ 
+    def patchClusterSnapshotSchedule(self, groupId, clusterId, payload):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/snapshotSchedule'
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
