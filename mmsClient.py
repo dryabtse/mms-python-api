@@ -104,6 +104,22 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+    def getBackupConfigs(self, groupId):
+        url = self.url + 'groups/' + groupId + '/backupConfigs'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getClusterBackupConfig(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchClusterBackupConfig(self, groupId, clusterId, payload):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
     def getClusterSnapshots(self, groupId, clusterId):
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/snapshots'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
