@@ -180,40 +180,40 @@ class MmsClient:
         return json.loads(result.text)
 
     def getAlertConfig(self, groupId):
-        url = self.url + 'groups/' + groupId + '/alertConfig'
+        url = self.url + 'groups/' + groupId + '/alertConfigs'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def postAlertConfig(self, groupId, payload):
-        url = self.url + 'groups/' + groupId + '/alertConfig'
+        url = self.url + 'groups/' + groupId + '/alertConfigs'
         headers = {'Content-type': 'application/json'}
         result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAlertConfigById(self, groupId, alertConfigId):
-        url = self.url + 'groups/' + groupId + '/alertConfig/' + alertConfigId
+        url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def putAlertConfig(self, groupId, alertConfigId, alertConfig):
-        url = self.url + 'groups/' + groupId + '/alertConfig/' + alertConfigId
+        url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=alertConfig, headers=headers)
         return json.loads(result.text)
 
     def patchAlertConfig(self, groupId, alertConfigId, payload):
-        url = self.url + 'groups/' + groupId + '/alertConfig/' + alertConfigId
+        url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
         result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAlertConfig(self, groupId, alertConfigId):
-        url = self.url + 'groups/' + groupId + '/alertConfig/' + alertConfigId
+        url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getAlertsByAlertConfigId(self, groupId, alertConfigId):
-        url = self.url + 'groups/' + groupId + '/alertConfig/' + alertConfigId + '/alerts'
+        url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId + '/alerts'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
     
