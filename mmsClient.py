@@ -99,6 +99,7 @@ class MmsClient:
         return json.loads(result.text)
 
 # Backup and Restore
+    
     def getClusters(self, groupId):
         url = self.url + 'groups/' + groupId + '/clusters'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -161,7 +162,7 @@ class MmsClient:
         result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
-    # Alerts
+# Alerts
 
     def getAlerts(self, groupId):
         url = self.url + 'groups/' + groupId + '/alerts'
@@ -217,7 +218,7 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
     
-    # Global alerts
+# Global alerts
 
     def getGlobalAlerts(self, status=None):
         url = self.url + 'globalAlerts'
@@ -274,3 +275,39 @@ class MmsClient:
         url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+# Maintenance windows
+
+    def getMaintenanceWindows(self, groupId):
+        url = self.url + 'groups/' + groupId + '/maintenanceWindows'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getMaintenanceWindowById(self, groupId, maintenanceWindowId):
+        url = self.url + 'groups/' + groupId + '/maintenanceWindows/' + maintenanceWindowId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postMaintenanceWindow(self, groupId, maintenanceWindow):
+        url = self.url + 'groups/' + groupId + '/maintenanceWindows'
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(maintenanceWindow), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchMaintenanceWindow(self, groupId, maintenanceWindowId, payload):
+        url = self.url + 'groups/' + groupId + '/maintenanceWindows/' + maintenanceWindowId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delMaintenanceWindow(self, groupId, maintenanceWindowId):
+        url = self.url + 'groups/' + groupId + '/maintenanceWindows/' + maintenanceWindowId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+
+
+
+    
+        
+
