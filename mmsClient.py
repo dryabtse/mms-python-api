@@ -184,10 +184,10 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def postAlertConfig(self, groupId, payload):
+    def postAlertConfig(self, groupId, alertConfig):
         url = self.url + 'groups/' + groupId + '/alertConfigs'
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, data=json.dumps(alertConfig), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAlertConfigById(self, groupId, alertConfigId):
@@ -218,3 +218,59 @@ class MmsClient:
         return json.loads(result.text)
     
     # Global alerts
+
+    def getGlobalAlerts(self, status=None):
+        url = self.url + 'globalAlerts'
+        if (status):
+            url = url + '?status=' + status
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getGlobalAlertById(self, globalAlertId):
+        url = self.url + 'globalAlerts/' + globalAlertId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def patchGlobalAlert(self, globalAlertId, payload):
+        url = self.url + 'globalAlerts/' + globalAlertId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def getGlobalAlertConfigs(self):
+        url = self.url + 'globalAlertConfigs'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getGlobalAlertConfigById(self, globalAlertConfigId):
+        url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAlertsByGlobalAlertConfigId(self, globalAlertConfigId):
+        url = self.url + 'globalAlertConfigs/' + globalAlertConfigId + '/alerts'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def postGlobalAlertConfig(self, globalAlertConfig):
+        url = self.url + 'globalAlertConfigs'
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(globalAlertConfig), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+    
+    def putGlobalAlertConfig(self, globalAlertConfigId, globalAlertConfig):
+        url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
+        headers = {'Content-type': 'application/json'}
+        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=globalAlertConfig, headers=headers)
+        return json.loads(result.text)
+
+    def patchGlobalAlertConfig(self, globalAlertConfigId, payload):
+        url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delGlobalAlertConfig(self, globalAlertConfig):
+        url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
