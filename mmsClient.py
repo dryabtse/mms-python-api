@@ -305,6 +305,81 @@ class MmsClient:
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+# Measurements
+
+    def getHostMeasurements(self, groupId, hostId, granularity, measurements=None, period=None, start=None, end=None):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/measurements?granularity=' + granularity
+        
+        if not (measurements is None):
+            if (isinstance(measurements, basestring)):
+                url = url + '&m=' + measurements
+            else:
+                try:
+                    for m in measurements:
+                        url = url + '&m=' + m
+                except TypeError:
+                    return { 'Error': '\'measurement\' is expected to be a string or a list' }
+
+        if (period is not None):
+            url = url + '&period=' + period
+        else:
+            if((start is not None) and (end is not None)):
+                url = url + '&start=' + start + '&end=' + end
+            else:
+                return { 'Error': 'This endpoint requires either \'period\' or \'start\' & \'end\' parameters to be passed on' }
+        
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getDiskPartitionMeasurements(self, groupId, hostId, partitionName, granularity, measurements=None, period=None, start=None, end=None):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/disks/' + partitionName +'/measurements?granularity=' + granularity
+        
+        if not (measurements is None):
+            if (isinstance(measurements, basestring)):
+                url = url + '&m=' + measurements
+            else:
+                try:
+                    for m in measurements:
+                        url = url + '&m=' + m
+                except TypeError:
+                    return { 'Error': '\'measurement\' is expected to be a string or a list' }
+
+        if (period is not None):
+            url = url + '&period=' + period
+        else:
+            if((start is not None) and (end is not None)):
+                url = url + '&start=' + start + '&end=' + end
+            else:
+                return { 'Error': 'This endpoint requires either \'period\' or \'start\' & \'end\' parameters to be passed on' }
+
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getDatabaseMeasurements(self, groupId, hostId, databaseName, granularity, measurements=None, period=None, start=None, end=None):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/databases/' + databaseName +'/measurements?granularity=' + granularity
+        
+        if not (measurements is None):
+            if (isinstance(measurements, basestring)):
+                url = url + '&m=' + measurements
+            else:
+                try:
+                    for m in measurements:
+                        url = url + '&m=' + m
+                except TypeError:
+                    return { 'Error': '\'measurement\' is expected to be a string or a list' }
+
+        if (period is not None):
+            url = url + '&period=' + period
+        else:
+            if((start is not None) and (end is not None)):
+                url = url + '&start=' + start + '&end=' + end
+            else:
+                return { 'Error': 'This endpoint requires either \'period\' or \'start\' & \'end\' parameters to be passed on' }
+
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+
 
 
 
