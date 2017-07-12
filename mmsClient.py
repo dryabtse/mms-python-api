@@ -8,7 +8,15 @@ class MmsClient:
         self.username = username
         self.apiKey = apiKey
         self.url = baseUrl + '/api/public/v1.0/'
+
+# Root
+
+    def getRoot(self):
+        result = requests.get(self.url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
 # Groups
+
     def getGroups(self):
         url = self.url + 'groups'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -28,7 +36,9 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/users'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
 # Hosts
+
     def getHosts(self, groupId):
         url = self.url + 'groups/' + groupId + '/hosts'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -59,7 +69,9 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/automationStatus'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
 # Agents        
+
     def putMonAgentInfo(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/monitoringAgentConfig' 
         headers = {'Content-type': 'application/json'}
