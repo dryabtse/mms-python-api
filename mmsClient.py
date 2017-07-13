@@ -226,7 +226,7 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
  
-    def updateAutomationConfig(self, groupId, automationConfig):
+    def putAutomationConfig(self, groupId, automationConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig'
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
@@ -239,13 +239,13 @@ class MmsClient:
 
 # Agents        
 
-    def putMonAgentInfo(self, groupId, agentConfig):
+    def putMonitoringAgentConfig(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/monitoringAgentConfig' 
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
         return json.loads(result.text)
         
-    def putBackAgentInfo(self, groupId, agentConfig):
+    def putBackupAgentConfig(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/backupAgentConfig' 
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
@@ -300,7 +300,7 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def getClusterSnapshotById(self, groupId, clusterId, snapshotId):
+    def getClusterSnapshotBySnapshotId(self, groupId, clusterId, snapshotId):
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/snapshots/' + snapshotId
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
@@ -310,21 +310,61 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def getHostSnapshotById(self, groupId, hostId, snapshotId):
+    def getHostSnapshotBySnapshotId(self, groupId, hostId, snapshotId):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/snapshots/' + snapshotId
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def postClusterRestoreJob(self, groupId, clusterId, payload):
-        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+    # Backup Encryption Keys
+
+    def putClusterEncryptionKey(self, groupId, clusterId, encryptionKey):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/encryptionKey'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=payload, headers=headers)
+        result = requests.put(url, json=encryptionKey, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
-    def getClusterRestoreJobs(self, groupId, clusterId):
-        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+    def getClusterEncryptionKey(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/encryptionKey'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+    # Restore Jobs
+
+    def getClusterRestoreJobs(self, groupId, clusterId, batchId=None):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+        if (batchId is not None):
+            url = url + '?batchId=' + batchId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getClusterRestoreJobByRestoreJobId(self, groupId, clusterId, restoreJobId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs/' + restoreJobId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getHostRestoreJobs(self, groupId, hostId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/restoreJobs'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getHostRestoreJobByRestoreJobId(self, groupId, hostId, restoreJobId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/restoreJobs' + restoreJobId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postClusterRestoreJob(self, groupId, clusterId, restoreJob):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey),  headers=headers)
+        return json.loads(result.text)
+
+    def postHostRestoreJob(self, groupId, hostId, restoreJob):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/restoreJobs'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    # Snapshot Schedule
 
     def getClusterSnapshotSchedule(self, groupId, clusterId):
         url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/snapshotSchedule'
@@ -335,6 +375,18 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/snapshotSchedule'
         headers = {'Content-type': 'application/json'}
         result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    # Checkpoints
+
+    def getClusterCheckpoints(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/checkpoints'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getClusterCheckpointsByCheckpointId(self, groupId, clusterId, checkpointId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/checkpoints/' + checkpointId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Alerts
@@ -553,3 +605,5 @@ class MmsClient:
 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+# Server Pool
