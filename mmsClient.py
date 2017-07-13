@@ -27,6 +27,34 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+    def getGroupByGroupName(self, groupId, groupName):
+        url = self.url + 'groups/byName' + groupName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupByAgentApiKey(self, groupId, agentApiKey):
+        url = self.url + 'groups/byAgentApiKey' + agentApiKey
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postGroup(self, group):
+        url = self.url + 'groups'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=group, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def postGroupUser(self, groupId, user):
+        url = self.url + 'groups/' + groupId + '/users'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchGroup(self, groupId, payload):
+        url = self.url + 'groups/' + groupId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
     def delGroup(self, groupId):
         url = self.url + 'groups/' + groupId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -37,10 +65,93 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+    def delGroupUser(self, groupId, userId):
+        url = self.url + 'groups/' + groupId + '/users/' + userId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupByTags(self, groupId, tags):
+        url = self.url + 'groups/?'
+        
+        if (isinstance(tags, basestring)):
+            url = url + 'tags=' + tags
+        else:
+            try:
+                i = 0
+                for tag in tags:
+                    if ( i > 0 ):
+                        url = url + '&'
+                    url = url + 'tag=' + tag
+                    i = i + 1
+            except TypeError:
+                return { 'Error': '\'tags\' is expected to be a string or a list' }
+
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# Users
+
+    def getUserByUserId(self, userId):
+        url = self.url + 'users/' + userId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getUserByUserName(self, userName):
+        url = self.url + 'users/' + userName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def postUser(self, user):
+        url = self.url + 'users'
+        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def postFirstUser(self, user):
+        url = self.url + 'unauth/users'
+        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchUser(self, userId, payload):
+        url = self.url + 'users/' + userId
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+# Whitelist
+
+    def getWhitelist(self, userId):
+        url = self.url + 'users/' + userId + '/whitelist'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getWhitelistByIpAddress(self, userId, ipAddress):
+        url = self.url + 'users/' + userId + '/whitelist/' + ipAddress
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postWhitelist(self, userId, whitelist):
+        url = self.url + 'users/' + userId + '/whitelist'
+        result = requests.post(url, json=whitelist, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delWhitelistByIpAddress(self, userId, ipAddress):
+        url = self.url + 'users/' + userId + '/whitelist/' + ipAddress
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delWhitelistByCidrBlock(self, userId, cidrBlock):
+        url = self.url + 'users/' + userId + '/whitelist/' + cidrBlock
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
 # Hosts
 
     def getHosts(self, groupId):
         url = self.url + 'groups/' + groupId + '/hosts'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getHostByHostId(self, groupId, hostId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
@@ -49,11 +160,67 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
+    def postHost(self, groupId, host):
+        url = self.url + 'groups/' + groupId + '/hosts'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=host, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchHost(self, groupId, hostId, payload):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
     def delHost(self, groupId, hostId):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+# Disks
+
+    def getDiskPartitions(self, groupId, hostId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/disks'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getDiskPartitionByPartitionName(self, groupId, hostId, partitionName):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/disks/' + partitionName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# Databases
+
+    def getDatabases(self, groupId, hostId):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/databases'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getDatabaseByDatabaseName(self, groupId, hostId, databaseName):
+        url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/databases/' + databaseName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# Clusters
+
+    def getClusters(self, groupId):
+        url = self.url + 'groups/' + groupId + '/clusters'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getClusterByClusterId(self, groupId, clusterId):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchCluster(self, groupId, clusterId, payload):
+        url = self.url + 'groups/' + groupId + '/clusters/' + clusterId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
 # Automation         
+
     def getAutomationConfig(self, groupId):
         url = self.url + 'groups/' + groupId + '/automationConfig'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -112,11 +279,6 @@ class MmsClient:
 
 # Backup and Restore
     
-    def getClusters(self, groupId):
-        url = self.url + 'groups/' + groupId + '/clusters'
-        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
-        return json.loads(result.text)
-
     def getBackupConfigs(self, groupId):
         url = self.url + 'groups/' + groupId + '/backupConfigs'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -155,7 +317,8 @@ class MmsClient:
 
     def postClusterRestoreJob(self, groupId, clusterId, payload):
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
-        result = requests.post(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=payload)
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=payload, headers=headers)
         return json.loads(result.text)
 
     def getClusterRestoreJobs(self, groupId, clusterId):
@@ -200,7 +363,7 @@ class MmsClient:
     def postAlertConfig(self, groupId, alertConfig):
         url = self.url + 'groups/' + groupId + '/alertConfigs'
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(alertConfig), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAlertConfigById(self, groupId, alertConfigId):
@@ -268,7 +431,7 @@ class MmsClient:
     def postGlobalAlertConfig(self, globalAlertConfig):
         url = self.url + 'globalAlertConfigs'
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(globalAlertConfig), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, json=globalAlertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
     
     def putGlobalAlertConfig(self, globalAlertConfigId, globalAlertConfig):
@@ -303,7 +466,7 @@ class MmsClient:
     def postMaintenanceWindow(self, groupId, maintenanceWindow):
         url = self.url + 'groups/' + groupId + '/maintenanceWindows'
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(maintenanceWindow), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, json=maintenanceWindow, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchMaintenanceWindow(self, groupId, maintenanceWindowId, payload):
@@ -390,11 +553,3 @@ class MmsClient:
 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-
-
-
-
-
-    
-        
-
