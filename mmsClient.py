@@ -8,6 +8,7 @@ class MmsClient:
         self.username = username
         self.apiKey = apiKey
         self.url = baseUrl + '/api/public/v1.0/'
+        self.atlasUrl = baseUrl + '/api/atlas/v1.0/'
 
 # Root
 
@@ -21,7 +22,7 @@ class MmsClient:
 # Groups
 
     def getGroups(self, pageNum=None, itemsPerPage=100, pretty=False):
-        url = self.url + 'groups?itemsPerPage=' + str(itemsPerPage) + '&pretty=' + pretty
+        url = self.url + 'groups?itemsPerPage=' + str(itemsPerPage) + '&pretty=' + str(pretty)
         if (pageNum is not None):
             url = url + '&pageNume=' + str(pageNum) 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -129,6 +130,7 @@ class MmsClient:
         return json.loads(result.text)
 
     def getWhitelistByIpAddress(self, userId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
         url = self.url + 'users/' + userId + '/whitelist/' + ipAddress
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
@@ -139,12 +141,8 @@ class MmsClient:
         return json.loads(result.text)
 
     def delWhitelistByIpAddress(self, userId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
         url = self.url + 'users/' + userId + '/whitelist/' + ipAddress
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
-        return json.loads(result.text)
-
-    def delWhitelistByCidrBlock(self, userId, cidrBlock):
-        url = self.url + 'users/' + userId + '/whitelist/' + cidrBlock
         result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
@@ -734,3 +732,221 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/serverPool/properties'
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+## ATLAS
+
+# Group IP Whitelist
+
+    def getAtlasGroupWhitelist(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/whitelist'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupWhitelistEntryByIpAddress(self, groupId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
+        url = self.atlasUrl + 'group/' + groupId + '/whitelist/' + ipAddress
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupWhitelistEntry(self, groupId, cidrBlock):
+        url = self.atlasUrl + 'group/' + groupId + '/whitelist'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=cidrBlock, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtlasGroupWhitelistEntry(self, groupId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
+        url = self.atlasUrl + 'group/' + groupId + '/whitelist/' + ipAddress
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# Database Users
+
+    def getAtlasGroupDatabaseUsers(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupDatabaseUserByUserName(self, groupId, userName):
+        url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers/admin/' + userName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupDatabaseUser(self, groupId, user):
+        url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchAtlasGroupDatabaseUser(self, groupId, userName, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers/admin/' + userName
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtlasGroupDatabaseUser(self, groupId, userName):
+        url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers/admin/' + userName
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupClusters(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/clusters'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupClusterByClusterName(self, groupId, clusterName):
+        url = self.atlasUrl + 'groups/' + groupId + '/clusters/' + clusterName
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupCluster(self, groupId, cluster):
+        url = self.atlasUrl + 'groups/' + groupId + '/clusters'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=cluster, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchAtlasGroupCluster(self, groupId, clusterName, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/clusters/' + clusterName
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtalsGroupCluster(self, groupId, clusterName):
+        url = self.atlasUrl + 'groups/' + groupId + '/clusters/' + clusterName
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# Alerts
+    
+    def getAtlasGroupAlerts(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alerts'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupAlertByAlertId(self, groupId, alertId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alerts/' + alertId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchAtlasGroupAlert(self, groupId, alertId, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/alerts/' + alertId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+# Alert Configurations
+
+    def getAtlasGroupAlertConfigs(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupAlertConfig(self, groupId, alertConfig):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs'       
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def getAltasGroupAlertConfigByAlertConfigId(self, groupId, alertConfigId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def putAtlasGroupAlertConfig(self, groupId, alertConfigId, alertConfig):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
+        headers = {'Content-type': 'application/json'}
+        result = requests.put(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchAtlasGroupAlertConfig(self, groupId, alertConfigId, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtalsGroupAlertConfig(self, groupId, alertConfigId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAtlasGroupAlertConfigAlerts(self, groupId, alertConfigId):
+        url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId + '/alerts'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# VPC
+
+    def getAtlasGroupContainers(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/containers'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupContainer(self, groupId, container):
+        url = self.atlasUrl + 'groups/' + groupId + '/containers'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=container, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def getAtlasGroupContainerByContainerId(self, groupId, containerId):
+        url = self.atlasUrl + 'groups/' + groupId + '/containers/' + containerId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchAtlasGroupContainer(self, groupId, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/containers/' + containerId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+    
+    def getAtlasGroupPeers(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/peers'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasGroupPeer(self, groupId, peer):
+        url = self.atlasUrl + 'groups/' + groupId + '/peers'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=peer, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def getAtlasGroupPeerByPeerId(self, groupId, peerId):
+        url = self.atlasUrl + 'groups/' + groupId + '/peers/' + peerId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchAtlasGroupPeer(self, groupId, peerId, payload):
+        url = self.atlasUrl + 'groups/' + groupId + '/peers/' + peerId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtlasGroupPeer(self, groupId, peerId):
+        url = self.atlasUrl + 'groups/' + groupId + '/peers/' + peerId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+# User API Whitelist
+
+    def getAtlasUserWhitelist(self, userId):
+        url = self.atlasUrl + 'users/' + userId + '/whitelist'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getAltasUserWhitelistByIpAddress(self, userId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
+        url = self.atlasUrl + 'users/' + userId + '/whitelist/' + ipAddress
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postAtlasUserWhitelistEntry(self, userId, whitelistEntry):
+        url = self.atlasUrl + 'users/' + userId + '/whitelist'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=whitelistEntry, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delAtlasUserWhitelistEntry(self, userId, ipAddress):
+        # TODO handle CIDR blocks if passed instead of IP Address
+        url = self.atlasUrl + 'users/' + userId + '/whitelist/' + ipAddress
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+        
