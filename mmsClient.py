@@ -11,14 +11,19 @@ class MmsClient:
 
 # Root
 
-    def getRoot(self):
+    def getRoot(self, pageNum=None, itemsPerPage=100, envelope=False):
+        url = self.url + '?itemsPerPage=' + str(itemsPerPage) + '&envelope=' + str(envelope)
+        if (pageNum is not None):
+            url = url + '&pageNume=' + str(pageNum) 
         result = requests.get(self.url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Groups
 
-    def getGroups(self):
-        url = self.url + 'groups'
+    def getGroups(self, pageNum=None, itemsPerPage=100, pretty=False):
+        url = self.url + 'groups?itemsPerPage=' + str(itemsPerPage) + '&pretty=' + pretty
+        if (pageNum is not None):
+            url = url + '&pageNume=' + str(pageNum) 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
@@ -262,17 +267,17 @@ class MmsClient:
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def getMonAgent(self, groupId):
+    def getMonitoringAgent(self, groupId):
         url = self.url + 'groups/' + groupId + '/agents/MONITORING' 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def getBakAgent(self, groupId):
+    def getBackupAgent(self, groupId):
         url = self.url + 'groups/' + groupId + '/agents/BACKUP' 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
     
-    def getAutoAgent(self, groupId): 
+    def getAutomationAgent(self, groupId): 
         url = self.url + 'groups/' + groupId + '/agents/AUTOMATION' 
         result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
@@ -607,3 +612,125 @@ class MmsClient:
         return json.loads(result.text)
 
 # Server Pool
+    
+    def getServerPool(self):
+        url = self.url + 'serverPool'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getServerPoolServers(self, status=None):
+        url = self.url + 'serverPool/servers'
+        if (status is not None):
+            url = url + '?status=' + status
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getServerPoolServerByServerId(self, serverId):
+        url = self.url + 'serverPool/servers/' + serverId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getServerPoolServersByHostname(self, hostname):
+        url = self.url + 'serverPool/servers/byName/' + hostname
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delServerPoolServer(self, serverId):
+        url = self.url + 'serverPool/servers/' + serverId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getServerPoolRequests(self, status=None):
+        url = self.url + 'serverPool/requests'
+        if (status is not None):
+            url = url + '?status=' + status
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getServerPoolRequestByRequestId(self, requestId):
+        url = self.url + 'serverPool/requests/' + requestId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delServerPoolRequest(self, requestId):
+        url = self.url + 'serverPool/requests/' + requestId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getServerPoolProperties(self):
+        url = self.url + 'serverPool/properties'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def patchServerPoolProperty(self, propertyId, payload):
+        url = self.url + 'serverPool/properties/' + propertyId
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def patchServerPoolPropertyValue(self, propertyId, valueName, payload):
+        url = self.url + 'serverPool/properties/' + propertyId + '/values/' + valueName
+        headers = {'Content-type': 'application/json'}
+        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delServerPoolProperty(self, propertyId):
+        url = self.url + 'serverPool/properties/' + propertyId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delServerPoolPropertyValue(self, propertyId, valueName):
+        url = self.url + 'serverPool/properties/' + propertyId + '/values/' + valueName
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPool(self, groupId):
+        url = self.url + 'groups/' + groupId + '/serverPool'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolServers(self, groupId):
+        url = self.url + 'groups/' + groupId + '/serverPool/servers'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolServerByServerId(self, groupId, serverId):
+        url = self.url + 'groups/' + groupId + '/serverPool/servers' + serverId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolServerByHostname(self, groupId, hostname):
+        url = self.url + 'groups/' + groupId + '/serverPool/servers/byName/' + hostname
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def delGroupServerPoolServer(self, groupId, serverId):
+        url = self.url + 'groups/' + groupId + '/serverPool/servers' + serverId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolRequests(self, groupId):
+        url = self.url + 'groups/' + groupId + '/serverPool/requests'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolRequestByRequestId(self, groupId, requestId):
+        url = self.url + 'groups/' + groupId + '/serverPool/requests/' + requestId
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def postGroupServerPoolRequest(self, groupId, request):
+        url = self.url + 'groups/' + groupId + '/serverPool/requests'
+        headers = {'Content-type': 'application/json'}
+        result = requests.post(url, json=request, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
+    def delGroupServerPoolRequest(self, groupId, requestId):
+        url = self.url + 'groups/' + groupId + '/serverPool/requests/' + requestId
+        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+
+    def getGroupServerPoolProperties(self, groupId):
+        url = self.url + 'groups/' + groupId + '/serverPool/properties'
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
