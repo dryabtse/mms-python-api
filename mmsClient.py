@@ -208,7 +208,7 @@ class MmsClient:
 
     def getClusters(self, groupId):
         url = self.url + 'groups/' + groupId + '/clusters'
-        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.get(url, auth=HTTPDigestAuth(self.username, self.apiKey), verify=False)
         return json.loads(result.text)
 
     def getClusterByClusterId(self, groupId, clusterId):
