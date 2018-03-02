@@ -59,7 +59,7 @@ class MmsClient:
     def patchGroup(self, groupId, payload):
         url = self.url + 'groups/' + groupId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delGroup(self, groupId):
@@ -120,7 +120,7 @@ class MmsClient:
 
     def patchUser(self, userId, payload):
         url = self.url + 'users/' + userId
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
 # Whitelist
@@ -173,7 +173,7 @@ class MmsClient:
     def patchHost(self, groupId, hostId, payload):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delHost(self, groupId, hostId):
@@ -220,7 +220,7 @@ class MmsClient:
     def patchCluster(self, groupId, clusterId, payload):
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
 # Automation         
@@ -233,7 +233,7 @@ class MmsClient:
     def putAutomationConfig(self, groupId, automationConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig'
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
+        result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=automationConfig, headers=headers)
         return json.loads(result.text)
 
     def getAutomationStatus(self, groupId):
@@ -246,13 +246,13 @@ class MmsClient:
     def putMonitoringAgentConfig(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/monitoringAgentConfig' 
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
+        result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
         return json.loads(result.text)
         
     def putBackupAgentConfig(self, groupId, agentConfig):
         url = self.url + 'groups/' + groupId + '/automationConfig/backupAgentConfig' 
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
+        result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
         return json.loads(result.text)
     
     def getAgents(self, groupId):
@@ -296,7 +296,7 @@ class MmsClient:
     def patchClusterBackupConfig(self, groupId, clusterId, payload):
         url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getClusterSnapshots(self, groupId, clusterId):
@@ -324,7 +324,7 @@ class MmsClient:
     def putClusterEncryptionKey(self, groupId, clusterId, encryptionKey):
         url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/encryptionKey'
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, json=encryptionKey, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.put(url, verify=self.verify, json=encryptionKey, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getClusterEncryptionKey(self, groupId, clusterId):
@@ -378,7 +378,7 @@ class MmsClient:
     def patchClusterSnapshotSchedule(self, groupId, clusterId, payload):
         url = self.url + 'groups/' + groupId + '/backupConfigs/' + clusterId + '/snapshotSchedule'
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     # Checkpoints
@@ -408,7 +408,7 @@ class MmsClient:
     def patchAlert(self, groupId, alertId, payload):
         url = self.url + 'groups/' + groupId + '/alerts/' + alertId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAlertConfig(self, groupId):
@@ -430,13 +430,13 @@ class MmsClient:
     def putAlertConfig(self, groupId, alertConfigId, alertConfig):
         url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=alertConfig, headers=headers)
+        result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=alertConfig, headers=headers)
         return json.loads(result.text)
 
     def patchAlertConfig(self, groupId, alertConfigId, payload):
         url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAlertConfig(self, groupId, alertConfigId):
@@ -466,7 +466,7 @@ class MmsClient:
     def patchGlobalAlert(self, globalAlertId, payload):
         url = self.url + 'globalAlerts/' + globalAlertId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getGlobalAlertConfigs(self):
@@ -493,13 +493,13 @@ class MmsClient:
     def putGlobalAlertConfig(self, globalAlertConfigId, globalAlertConfig):
         url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, auth=HTTPDigestAuth(self.username, self.apiKey), json=globalAlertConfig, headers=headers)
+        result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=globalAlertConfig, headers=headers)
         return json.loads(result.text)
 
     def patchGlobalAlertConfig(self, globalAlertConfigId, payload):
         url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delGlobalAlertConfig(self, globalAlertConfig):
@@ -528,7 +528,7 @@ class MmsClient:
     def patchMaintenanceWindow(self, groupId, maintenanceWindowId, payload):
         url = self.url + 'groups/' + groupId + '/maintenanceWindows/' + maintenanceWindowId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delMaintenanceWindow(self, groupId, maintenanceWindowId):
@@ -664,13 +664,13 @@ class MmsClient:
     def patchServerPoolProperty(self, propertyId, payload):
         url = self.url + 'serverPool/properties/' + propertyId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchServerPoolPropertyValue(self, propertyId, valueName, payload):
         url = self.url + 'serverPool/properties/' + propertyId + '/values/' + valueName
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delServerPoolProperty(self, propertyId):
@@ -782,7 +782,7 @@ class MmsClient:
     def patchAtlasGroupDatabaseUser(self, groupId, userName, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers/admin/' + userName
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtlasGroupDatabaseUser(self, groupId, userName):
@@ -809,7 +809,7 @@ class MmsClient:
     def patchAtlasGroupCluster(self, groupId, clusterName, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/clusters/' + clusterName
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtalsGroupCluster(self, groupId, clusterName):
@@ -832,7 +832,7 @@ class MmsClient:
     def patchAtlasGroupAlert(self, groupId, alertId, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/alerts/' + alertId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
 # Alert Configurations
@@ -856,13 +856,13 @@ class MmsClient:
     def putAtlasGroupAlertConfig(self, groupId, alertConfigId, alertConfig):
         url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.put(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.put(url, verify=self.verify, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchAtlasGroupAlertConfig(self, groupId, alertConfigId, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtalsGroupAlertConfig(self, groupId, alertConfigId):
@@ -896,7 +896,7 @@ class MmsClient:
     def patchAtlasGroupContainer(self, groupId, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/containers/' + containerId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
     
     def getAtlasGroupPeers(self, groupId):
@@ -918,7 +918,7 @@ class MmsClient:
     def patchAtlasGroupPeer(self, groupId, peerId, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/peers/' + peerId
         headers = {'Content-type': 'application/json'}
-        result = requests.patch(url, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtlasGroupPeer(self, groupId, peerId):
