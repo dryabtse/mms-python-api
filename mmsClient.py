@@ -47,13 +47,13 @@ class MmsClient:
     def postGroup(self, group):
         url = self.url + 'groups'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=group, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=group, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def postGroupUser(self, groupId, user):
         url = self.url + 'groups/' + groupId + '/users'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchGroup(self, groupId, payload):
@@ -64,7 +64,7 @@ class MmsClient:
 
     def delGroup(self, groupId):
         url = self.url + 'groups/' + groupId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getGroupUsers(self, groupId):
@@ -74,7 +74,7 @@ class MmsClient:
 
     def delGroupUser(self, groupId, userId):
         url = self.url + 'groups/' + groupId + '/users/' + userId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getGroupByTags(self, groupId, tags):
@@ -110,12 +110,12 @@ class MmsClient:
     
     def postUser(self, user):
         url = self.url + 'users'
-        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def postFirstUser(self, user):
         url = self.url + 'unauth/users'
-        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchUser(self, userId, payload):
@@ -138,13 +138,13 @@ class MmsClient:
 
     def postWhitelist(self, userId, whitelist):
         url = self.url + 'users/' + userId + '/whitelist'
-        result = requests.post(url, json=whitelist, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=whitelist, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delWhitelistByIpAddress(self, userId, ipAddress):
         # TODO handle CIDR blocks if passed instead of IP Address
         url = self.url + 'users/' + userId + '/whitelist/' + ipAddress
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Hosts
@@ -167,7 +167,7 @@ class MmsClient:
     def postHost(self, groupId, host):
         url = self.url + 'groups/' + groupId + '/hosts'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=host, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=host, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchHost(self, groupId, hostId, payload):
@@ -178,7 +178,7 @@ class MmsClient:
 
     def delHost(self, groupId, hostId):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Disks
@@ -359,13 +359,13 @@ class MmsClient:
     def postClusterRestoreJob(self, groupId, clusterId, restoreJob):
         url = self.url + 'groups/' + groupId + '/clusters/' + clusterId + '/restoreJobs'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey),  headers=headers)
+        result = requests.post(url, verify=self.verify, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey),  headers=headers)
         return json.loads(result.text)
 
     def postHostRestoreJob(self, groupId, hostId, restoreJob):
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/restoreJobs'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=restoreJob, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     # Snapshot Schedule
@@ -419,7 +419,7 @@ class MmsClient:
     def postAlertConfig(self, groupId, alertConfig):
         url = self.url + 'groups/' + groupId + '/alertConfigs'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAlertConfigById(self, groupId, alertConfigId):
@@ -441,7 +441,7 @@ class MmsClient:
 
     def delAlertConfig(self, groupId, alertConfigId):
         url = self.url + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getAlertsByAlertConfigId(self, groupId, alertConfigId):
@@ -487,7 +487,7 @@ class MmsClient:
     def postGlobalAlertConfig(self, globalAlertConfig):
         url = self.url + 'globalAlertConfigs'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=globalAlertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=globalAlertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
     
     def putGlobalAlertConfig(self, globalAlertConfigId, globalAlertConfig):
@@ -504,7 +504,7 @@ class MmsClient:
 
     def delGlobalAlertConfig(self, globalAlertConfig):
         url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Maintenance windows
@@ -522,7 +522,7 @@ class MmsClient:
     def postMaintenanceWindow(self, groupId, maintenanceWindow):
         url = self.url + 'groups/' + groupId + '/maintenanceWindows'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=maintenanceWindow, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=maintenanceWindow, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchMaintenanceWindow(self, groupId, maintenanceWindowId, payload):
@@ -533,7 +533,7 @@ class MmsClient:
 
     def delMaintenanceWindow(self, groupId, maintenanceWindowId):
         url = self.url + 'groups/' + groupId + '/maintenanceWindows/' + maintenanceWindowId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Measurements
@@ -636,7 +636,7 @@ class MmsClient:
 
     def delServerPoolServer(self, serverId):
         url = self.url + 'serverPool/servers/' + serverId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getServerPoolRequests(self, status=None):
@@ -653,7 +653,7 @@ class MmsClient:
 
     def delServerPoolRequest(self, requestId):
         url = self.url + 'serverPool/requests/' + requestId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getServerPoolProperties(self):
@@ -675,12 +675,12 @@ class MmsClient:
 
     def delServerPoolProperty(self, propertyId):
         url = self.url + 'serverPool/properties/' + propertyId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def delServerPoolPropertyValue(self, propertyId, valueName):
         url = self.url + 'serverPool/properties/' + propertyId + '/values/' + valueName
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getGroupServerPool(self, groupId):
@@ -705,7 +705,7 @@ class MmsClient:
 
     def delGroupServerPoolServer(self, groupId, serverId):
         url = self.url + 'groups/' + groupId + '/serverPool/servers' + serverId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getGroupServerPoolRequests(self, groupId):
@@ -721,12 +721,12 @@ class MmsClient:
     def postGroupServerPoolRequest(self, groupId, request):
         url = self.url + 'groups/' + groupId + '/serverPool/requests'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=request, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=request, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delGroupServerPoolRequest(self, groupId, requestId):
         url = self.url + 'groups/' + groupId + '/serverPool/requests/' + requestId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getGroupServerPoolProperties(self, groupId):
@@ -752,13 +752,13 @@ class MmsClient:
     def postAtlasGroupWhitelistEntry(self, groupId, cidrBlock):
         url = self.atlasUrl + 'group/' + groupId + '/whitelist'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=cidrBlock, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=cidrBlock, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtlasGroupWhitelistEntry(self, groupId, ipAddress):
         # TODO handle CIDR blocks if passed instead of IP Address
         url = self.atlasUrl + 'group/' + groupId + '/whitelist/' + ipAddress
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Database Users
@@ -776,7 +776,7 @@ class MmsClient:
     def postAtlasGroupDatabaseUser(self, groupId, user):
         url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchAtlasGroupDatabaseUser(self, groupId, userName, payload):
@@ -787,7 +787,7 @@ class MmsClient:
 
     def delAtlasGroupDatabaseUser(self, groupId, userName):
         url = self.atlasUrl + 'groups/' + groupId + '/databaseUsers/admin/' + userName
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getAtlasGroupClusters(self, groupId):
@@ -803,7 +803,7 @@ class MmsClient:
     def postAtlasGroupCluster(self, groupId, cluster):
         url = self.atlasUrl + 'groups/' + groupId + '/clusters'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=cluster, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=cluster, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchAtlasGroupCluster(self, groupId, clusterName, payload):
@@ -814,7 +814,7 @@ class MmsClient:
 
     def delAtalsGroupCluster(self, groupId, clusterName):
         url = self.atlasUrl + 'groups/' + groupId + '/clusters/' + clusterName
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # Alerts
@@ -845,7 +845,7 @@ class MmsClient:
     def postAtlasGroupAlertConfig(self, groupId, alertConfig):
         url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs'       
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=alertConfig, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAltasGroupAlertConfigByAlertConfigId(self, groupId, alertConfigId):
@@ -867,7 +867,7 @@ class MmsClient:
 
     def delAtalsGroupAlertConfig(self, groupId, alertConfigId):
         url = self.atlasUrl + 'groups/' + groupId + '/alertConfigs/' + alertConfigId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
     def getAtlasGroupAlertConfigAlerts(self, groupId, alertConfigId):
@@ -885,7 +885,7 @@ class MmsClient:
     def postAtlasGroupContainer(self, groupId, container):
         url = self.atlasUrl + 'groups/' + groupId + '/containers'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=container, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=container, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAtlasGroupContainerByContainerId(self, groupId, containerId):
@@ -907,7 +907,7 @@ class MmsClient:
     def postAtlasGroupPeer(self, groupId, peer):
         url = self.atlasUrl + 'groups/' + groupId + '/peers'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=peer, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=peer, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def getAtlasGroupPeerByPeerId(self, groupId, peerId):
@@ -923,7 +923,7 @@ class MmsClient:
 
     def delAtlasGroupPeer(self, groupId, peerId):
         url = self.atlasUrl + 'groups/' + groupId + '/peers/' + peerId
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
 # User API Whitelist
@@ -942,12 +942,12 @@ class MmsClient:
     def postAtlasUserWhitelistEntry(self, userId, whitelistEntry):
         url = self.atlasUrl + 'users/' + userId + '/whitelist'
         headers = {'Content-type': 'application/json'}
-        result = requests.post(url, json=whitelistEntry, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        result = requests.post(url, verify=self.verify, json=whitelistEntry, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def delAtlasUserWhitelistEntry(self, userId, ipAddress):
         # TODO handle CIDR blocks if passed instead of IP Address
         url = self.atlasUrl + 'users/' + userId + '/whitelist/' + ipAddress
-        result = requests.delete(url, auth=HTTPDigestAuth(self.username, self.apiKey))
+        result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
         
