@@ -905,7 +905,7 @@ class MmsClient:
         result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
 
-    def patchAtlasGroupContainer(self, groupId, payload):
+    def patchAtlasGroupContainer(self, groupId, containerId, payload):
         url = self.atlasUrl + 'groups/' + groupId + '/containers/' + containerId
         headers = {'Content-type': 'application/json'}
         result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
