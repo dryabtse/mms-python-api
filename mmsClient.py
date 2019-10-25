@@ -80,7 +80,7 @@ class MmsClient:
     def getGroupByTags(self, groupId, tags):
         url = self.url + 'groups/?'
         
-        if (isinstance(tags, basestring)):
+        if (isinstance(tags, str)):
             url = url + 'tags=' + tags
         else:
             try:
@@ -110,16 +110,19 @@ class MmsClient:
     
     def postUser(self, user):
         url = self.url + 'users'
+        headers = {'Content-type': 'application/json'}
         result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def postFirstUser(self, user):
         url = self.url + 'unauth/users'
+        headers = {'Content-type': 'application/json'}
         result = requests.post(url, verify=self.verify, json=user, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
     def patchUser(self, userId, payload):
         url = self.url + 'users/' + userId
+        headers = {'Content-type': 'application/json'}
         result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
@@ -138,6 +141,7 @@ class MmsClient:
 
     def postWhitelist(self, userId, whitelist):
         url = self.url + 'users/' + userId + '/whitelist'
+        headers = {'Content-type': 'application/json'}
         result = requests.post(url, verify=self.verify, json=whitelist, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
@@ -254,7 +258,13 @@ class MmsClient:
         headers = {'Content-type': 'application/json'}
         result = requests.put(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey), json=agentConfig, headers=headers)
         return json.loads(result.text)
-    
+
+    def postUpdateAgentVersions(self, groupId):
+        url = self.url + 'groups/' + groupId + '/automationConfig/updateAgentVersions'
+        headers = {'Accept': 'application/json'}
+        result = requests.post(url, verify=self.verify, json={}, auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
+        return json.loads(result.text)
+
     def getAgents(self, groupId):
         url = self.url + 'groups/' + groupId + '/agents'
         result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
@@ -280,6 +290,8 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/agents/AUTOMATION' 
         result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
+
+
 
 # Backup and Restore
     
@@ -502,7 +514,7 @@ class MmsClient:
         result = requests.patch(url, verify=self.verify, data=json.dumps(payload), auth=HTTPDigestAuth(self.username, self.apiKey), headers=headers)
         return json.loads(result.text)
 
-    def delGlobalAlertConfig(self, globalAlertConfig):
+    def delGlobalAlertConfig(self, globalAlertConfigId):
         url = self.url + 'globalAlertConfigs/' + globalAlertConfigId
         result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
@@ -542,7 +554,7 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/measurements?granularity=' + granularity
         
         if not (measurements is None):
-            if (isinstance(measurements, basestring)):
+            if (isinstance(measurements, str)):
                 url = url + '&m=' + measurements
             else:
                 try:
@@ -566,7 +578,7 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/disks/' + partitionName +'/measurements?granularity=' + granularity
         
         if not (measurements is None):
-            if (isinstance(measurements, basestring)):
+            if (isinstance(measurements, str)):
                 url = url + '&m=' + measurements
             else:
                 try:
@@ -590,7 +602,7 @@ class MmsClient:
         url = self.url + 'groups/' + groupId + '/hosts/' + hostId + '/databases/' + databaseName +'/measurements?granularity=' + granularity
         
         if not (measurements is None):
-            if (isinstance(measurements, basestring)):
+            if (isinstance(measurements, str)):
                 url = url + '&m=' + measurements
             else:
                 try:
