@@ -962,4 +962,25 @@ class MmsClient:
         url = self.atlasUrl + 'users/' + userId + '/whitelist/' + ipAddress
         result = requests.delete(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
         return json.loads(result.text)
-        
+
+# Events
+
+    def getAtlasOrgEvents(self, orgId):
+        url = self.atlasUrl + 'orgs/' + orgId + '/events'
+        result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text) 
+
+    def getAtlasOrgEvent(self, orgId, eventId):
+        url = self.atlasUrl + 'orgs/' + orgId + '/events/' + eventId
+        result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getAtlasGroupEvents(self, groupId):
+        url = self.atlasUrl + 'groups/' + groupId + '/events'
+        result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text)
+    
+    def getAtlasGroupEvent(self, groupId, eventId):
+        url = self.atlasUrl + 'groups/' + groupId + '/events/' + eventId
+        result = requests.get(url, verify=self.verify, auth=HTTPDigestAuth(self.username, self.apiKey))
+        return json.loads(result.text) 
